@@ -50,7 +50,12 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   async function getConfigJson() {
-    const config = await getJsonFile<Scripts>(`${cwd}/script-buttons.json`);
+    try {
+      const config = await getJsonFile<Scripts>(`${cwd}/script-buttons.json`);
+    } catch {
+      console.log('No script-buttons.json found in working directory, trying .vscode folder...');
+      const config = await getJsonFile<Scripts>(`${cwd}/.vscode/script-buttons.json`);
+    } 
     return config;
   }
 
